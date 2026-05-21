@@ -9,9 +9,61 @@
 </head>
 <body>
   <header>
-    <h1>Menadżer subskrypcji</h1>
+    <div class="header-content">
+      <h1>Menadżer subskrypcji</h1>
+      <button id="logoutBtn" class="logout-btn hidden">Wyloguj się</button>
+    </div>
   </header>
-  <main>
+  
+  <!-- Login/Register Section -->
+  <div id="loginSection" class="login-container">
+    <div class="login-box">
+      <h2 id="authTitle">Zaloguj się</h2>
+      
+      <!-- Login Form -->
+      <form id="loginForm">
+        <div class="form-group">
+          <label for="loginUsername">Login:</label>
+          <input type="text" id="loginUsername" placeholder="Wpisz login" required>
+        </div>
+        <div class="form-group">
+          <label for="loginPassword">Hasło:</label>
+          <input type="password" id="loginPassword" placeholder="Wpisz hasło" required>
+        </div>
+        <button type="submit" class="login-submit-btn">Zaloguj się</button>
+        <p class="login-info">Demo: login="<strong>krystian</strong>" hasło="<strong>agnieszka</strong>"</p>
+      </form>
+      
+      <!-- Register Form (Hidden by default) -->
+      <form id="registerForm" class="hidden">
+        <div class="form-group">
+          <label for="registerUsername">Login:</label>
+          <input type="text" id="registerUsername" placeholder="Wpisz nowy login" required>
+          <small id="userExistsMsg" class="error-msg hidden">Ten login już istnieje</small>
+        </div>
+        <div class="form-group">
+          <label for="registerPassword">Hasło:</label>
+          <input type="password" id="registerPassword" placeholder="Wpisz hasło" required>
+          <small id="pwdLengthMsg" class="error-msg hidden">Hasło musi mieć co najmniej 3 znaki</small>
+        </div>
+        <div class="form-group">
+          <label for="registerPasswordConfirm">Potwierdź hasło:</label>
+          <input type="password" id="registerPasswordConfirm" placeholder="Powtórz hasło" required>
+          <small id="pwdMatchMsg" class="error-msg hidden">Hasła się nie zgadzają</small>
+        </div>
+        <button type="submit" class="login-submit-btn">Zarejestruj się</button>
+        <p class="login-info" id="registerSuccess" class="hidden">Konto zostało utworzone! Możesz się zalogować.</p>
+      </form>
+      
+      <!-- Toggle between Login and Register -->
+      <p class="toggle-auth">
+        <span id="toggleMsg">Nie masz konta?</span>
+        <button type="button" id="toggleAuthBtn" class="toggle-link-btn">Zarejestruj się</button>
+      </p>
+    </div>
+  </div>
+
+  <main id="mainContent" class="hidden">
     <section class="controls">
       <form id="subForm">
         <input type="hidden" id="subId">

@@ -1,15 +1,155 @@
 // Prosty Menadżer subskrypcji — localStorage
 const STORAGE_KEY = 'subscriptions_v1'
 const CATEGORIES_KEY = 'subscription_categories_v1'
+const AUTH_KEY = 'subscription_auth_v1'
+const USERS_KEY = 'subscription_users_v1'
 const DEFAULT_CATEGORIES = ['Wideo','Muzyka','Aplikacje']
+const DEMO_CREDENTIALS = {username: 'krystian', password: 'agnieszka'}
 let subs = []
 let categories = []
+let isLoggedIn = false
+let isRegisterMode = false
 
 // DOM
 const el = id => document.getElementById(id)
 const tbody = document.querySelector('#subsTable tbody')
 const form = el('subForm')
 const totalEl = el('total')
+
+// Auth functions
+function initAuth(){
+  const session = sessionStorage.getItem(AUTH_KEY)
+  if(session){
+    isLoggedIn = true
+    showMainContent()
+  } else {
+    isLoggedIn = false
+    showLoginForm()
+  }
+}
+
+function showLoginForm(){
+  el('loginSection').classList.remove('hidden')
+  el('mainContent').classList.add('hidden')
+  el('logoutBtn').classList.add('hidden')
+}
+
+function showMainContent(){
+  el('loginSection').classList.add('hidden')
+  el('mainContent').classList.remove('hidden')
+  el('logoutBtn').classList.remove('hidden')
+}
+
+function handleLogin(e){
+  e.preventDefault()
+  const username = el('loginUsername').value.trim()
+  const password = el('loginPassword').value
+  
+  // Check demo credentials
+  if(username === DEMO_CREDENTIALS.username && password === DEMO_CREDENTIALS.password){
+    sessionStorage.setItem(AUTH_KEY, JSON.stringify({username, timestamp: Date.now()}))
+    isLoggedIn = true
+    el('loginForm').reset()
+    showMainContent()
+    return
+  }
+  
+  // Check registered users
+  const users = loadUsers()
+  const user = users.find(u => u.username === username && u.password === password)
+  
+  if(user){
+    sessionStorage.setItem(AUTH_KEY, JSON.stringify({username, timestamp: Date.now()}))
+    isLoggedIn = true
+    el('loginForm').reset()
+    showMainContent()
+  } else {
+    alert('Nieprawidłowy login lub hasło!')
+  }
+}
+
+function loadUsers(){
+  try{return JSON.parse(localStorage.getItem(USERS_KEY))||[]}catch(e){return []}
+}
+
+function saveUsers(users){
+  localStorage.setItem(USERS_KEY, JSON.stringify(users))
+}
+
+function userExists(username){
+  return loadUsers().some(u => u.username === username)
+}
+
+function toggleAuthMode(){
+  isRegisterMode = !isRegisterMode
+  const loginForm = el('loginForm')
+  const registerForm = el('registerForm')
+  const toggleMsg = el('toggleMsg')
+  const toggleBtn = el('toggleAuthBtn')
+  const authTitle = el('authTitle')
+  
+  if(isRegisterMode){
+    loginForm.classList.add('hidden')
+    registerForm.classList.remove('hidden')
+    authTitle.textContent = 'Zarejestruj się'
+    toggleMsg.textContent = 'Masz już konto?'
+    toggleBtn.textContent = 'Zaloguj się'
+  } else {
+    loginForm.classList.remove('hidden')
+    registerForm.classList.add('hidden')
+    authTitle.textContent = 'Zaloguj się'
+    toggleMsg.textContent = 'Nie masz konta?'
+    toggleBtn.textContent = 'Zarejestruj się'
+    clearRegisterMessages()
+  }
+}
+
+function clearRegisterMessages(){
+  el('userExistsMsg').classList.add('hidden')
+  el('pwdLengthMsg').classList.add('hidden')
+  el('pwdMatchMsg').classList.add('hidden')
+}
+
+function handleRegister(e){
+  e.preventDefault()
+  clearRegisterMessages()
+  
+  const username = el('registerUsername').value.trim()
+  const password = el('registerPassword').value
+  const passwordConfirm = el('registerPasswordConfirm').value
+  
+  // Validations
+  if(userExists(username) || username === DEMO_CREDENTIALS.username){
+    el('userExistsMsg').classList.remove('hidden')
+    return
+  }
+  
+  if(password.length < 3){
+    el('pwdLengthMsg').classList.remove('hidden')
+    return
+  }
+  
+  if(password !== passwordConfirm){
+    el('pwdMatchMsg').classList.remove('hidden')
+    return
+  }
+  
+  // Register user
+  const users = loadUsers()
+  users.push({username, password})
+  saveUsers(users)
+  
+  // Show success and reset
+  alert('Konto zostało utworzone! Możesz się teraz zalogować.')
+  el('registerForm').reset()
+  toggleAuthMode()
+}
+
+function handleLogout(){
+  sessionStorage.removeItem(AUTH_KEY)
+  isLoggedIn = false
+  showLoginForm()
+}
 
 function load(){
   try{subs = JSON.parse(localStorage.getItem(STORAGE_KEY))||[];}catch(e){subs=[]}
@@ -204,5 +344,12 @@ el('categoryModal').addEventListener('click', e=>{
   if(e.target.id==='categoryModal') closeCategoryModal()
 })
 
+// auth events
+el('loginForm').addEventListener('submit', handleLogin)
+el('registerForm').addEventListener('submit', handleRegister)
+el('logoutBtn').addEventListener('click', handleLogout)
+el('toggleAuthBtn').addEventListener('click', toggleAuthMode)
+
 // init
+initAuth()
 load(); loadCategories(); populateCategoryOptions(); initDatepicker(); render();

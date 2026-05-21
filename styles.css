@@ -3,6 +3,31 @@ html, body{height:100%}
 body{margin:0;background:#f6f8fb;color:#111;display:flex;flex-direction:column;min-height:100vh}
 header{background:linear-gradient(135deg,#2563eb 0%,#3b82f6 45%,#60a5fa 100%);color:#fff;padding:1rem;box-shadow:0 10px 30px rgba(37,99,235,.18)}
 header h1{margin:0;font-size:1.3rem}
+.header-content{display:flex;justify-content:space-between;align-items:center}
+.logout-btn{padding:.5rem 1rem;background:#ff6b6b;border:0;color:#fff;border-radius:6px;cursor:pointer;font-size:.9rem}
+.logout-btn:hover{background:#ff5252}
+.logout-btn.hidden{display:none}
+.login-container{display:flex;align-items:center;justify-content:center;min-height:100vh;background:#f6f8fb}
+.login-container.hidden{display:none}
+.login-box{background:#fff;padding:2rem;border-radius:12px;box-shadow:0 20px 50px rgba(0,0,0,.15);width:100%;max-width:360px}
+.login-box h2{text-align:center;margin-top:0;margin-bottom:1.5rem;color:#2563eb}
+.form-group{margin-bottom:1.25rem}
+.form-group label{display:block;margin-bottom:.5rem;font-weight:500;color:#374151}
+.form-group input{width:100%;padding:.75rem;border:1.5px solid #ddd;border-radius:8px;font-size:1rem}
+.form-group input:focus{outline:0;border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,235,.1)}
+.login-submit-btn{width:100%;padding:.75rem;background:linear-gradient(135deg,#2563eb 0%,#3b82f6 100%);color:#fff;border:0;border-radius:8px;font-size:1rem;font-weight:500;cursor:pointer;margin-top:.5rem}
+.login-submit-btn:hover{transform:translateY(-2px);box-shadow:0 10px 20px rgba(37,99,235,.2)}
+.login-info{text-align:center;color:#6b7280;font-size:.85rem;margin-top:1rem}
+.login-info strong{color:#2563eb}
+.toggle-auth{text-align:center;color:#6b7280;font-size:.9rem;margin-top:1.5rem;margin-bottom:0}
+.toggle-link-btn{background:none;border:none;color:#2563eb;text-decoration:underline;cursor:pointer;font-size:.9rem;padding:0;margin-left:.25rem}
+.toggle-link-btn:hover{color:#1e40af;text-decoration:underline}
+.error-msg{display:block;color:#dc2626;font-size:.75rem;margin-top:.25rem}
+.error-msg.hidden{display:none}
+.success-msg{color:#059669;font-size:.85rem;margin-top:.5rem;text-align:center}
+#registerForm{margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid #e5e7eb}
+#registerForm.hidden{display:none}
+.hidden{display:none!important}
 main{padding:1rem;max-width:1000px;margin:0 auto;flex:1}
 .controls{background:#fff;padding:1rem;border-radius:8px;box-shadow:0 1px 4px rgba(0,0,0,.06);margin-bottom:1rem}
 .row{display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:.5rem}
