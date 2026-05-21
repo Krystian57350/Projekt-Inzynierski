@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Menadżer subskrypcji</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <h1>Menadżer subskrypcji</h1>
+  </header>
+  <main>
+    <section class="controls">
+      <form id="subForm">
+        <input type="hidden" id="subId">
+        <div class="row">
+          <label>Nazwa <input id="name" required></label>
+          <label>Koszt <input id="cost" type="number" min="0" step="0.01" required></label>
+          <label>Okres
+            <select id="period">
+              <option value="monthly">Miesięczny</option>
+              <option value="yearly">Roczny</option>
+            </select>
+          </label>
+        </div>
+        <div class="row">
+          <label>Data następnej płatności <input id="nextDate" type="date"></label>
+          <label>
+            Kategoria
+            <div class="category-field">
+              <select id="category"></select>
+              <button type="button" id="addCategoryBtn" title="Dodaj kategorię">+</button>
+            </div>
+          </label>
+          <label>Aktywna <input id="active" type="checkbox" checked></label>
+        </div>
+        <div class="row">
+          <label>Notatka <input id="note"></label>
+        </div>
+        <div class="actions">
+          <button type="submit" id="saveBtn">Dodaj / Zapisz</button>
+          <button type="button" id="clearBtn">Wyczyść</button>
+        </div>
+      </form>
+      <div class="tools">
+        <input id="search" placeholder="Szukaj...">
+        <select id="filter">
+          <option value="all">Wszystkie</option>
+          <option value="active">Aktywne</option>
+          <option value="inactive">Nieaktywne</option>
+        </select>
+        <select id="sort">
+          <option value="addedDesc">Najnowsze</option>
+          <option value="costDesc">Koszt ▼</option>
+          <option value="costAsc">Koszt ▲</option>
+          <option value="dateAsc">Data ▲</option>
+          <option value="dateDesc">Data ▼</option>
+        </select>
+        <button id="exportBtn">Eksportuj JSON</button>
+        <input type="file" id="importFile" accept="application/json">
+        <button id="clearAllBtn">Usuń wszystko</button>
+      </div>
+    </section>
+
+    <section class="summary">
+      <div>Łączny koszt miesięczny: <strong id="total">0 zł</strong></div>
+    </section>
+
+    <section class="list">
+      <table id="subsTable">
+        <thead>
+          <tr>
+            <th>Nazwa</th>
+            <th>Koszt</th>
+            <th>Okres</th>
+            <th>Następna płatność</th>
+            <th>Kategoria</th>
+            <th>Notatka</th>
+            <th>Aktywna</th>
+            <th>Akcje</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
+  </main>
+  <footer>
+    <small>Prosty menadżer subskrypcji — dane przechowywane lokalnie.</small>
+  </footer>
+  <div class="modal hidden" id="categoryModal">
+    <div class="modal-content">
+      <h2>Dodaj kategorię</h2>
+      <label>Nazwa kategorii <input id="newCategoryName" autocomplete="off"></label>
+      <div class="modal-actions">
+        <button type="button" id="saveCategoryBtn">Zapisz</button>
+        <button type="button" id="cancelCategoryBtn">Anuluj</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
