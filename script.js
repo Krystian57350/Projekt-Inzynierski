@@ -52,6 +52,16 @@ function saveNewCategory(){
   closeCategoryModal()
 }
 
+function initDatepicker(){
+  if(typeof flatpickr === 'undefined') return
+  flatpickr(el('nextDate'), {
+    dateFormat: 'Y-m-d',
+    locale: 'pl',
+    allowInput: true,
+    disableMobile: true
+  })
+}
+
 function render(){
   const search = el('search').value.toLowerCase()
   const filter = el('filter').value
@@ -195,4 +205,4 @@ el('categoryModal').addEventListener('click', e=>{
 })
 
 // init
-load(); loadCategories(); populateCategoryOptions(); render();
+load(); loadCategories(); populateCategoryOptions(); initDatepicker(); render();

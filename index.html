@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Menadżer subskrypcji</title>
   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 </head>
 <body>
   <header>
@@ -25,7 +26,7 @@
           </label>
         </div>
         <div class="row">
-          <label>Data następnej płatności <input id="nextDate" type="date"></label>
+          <label>Data następnej płatności <input id="nextDate" type="text" autocomplete="off" placeholder="rrrr-mm-dd"></label>
           <label>
             Kategoria
             <div class="category-field">
@@ -86,7 +87,7 @@
     </section>
   </main>
   <footer>
-    <small>Prosty menadżer subskrypcji — dane przechowywane lokalnie.</small>
+    <small>Prosty menadżer subskrypcji — Krystian 57350 & Agnieszka 59886</small>
   </footer>
   <div class="modal hidden" id="categoryModal">
     <div class="modal-content">
@@ -99,6 +100,8 @@
     </div>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/pl.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
