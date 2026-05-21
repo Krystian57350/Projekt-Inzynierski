@@ -1,5 +1,4 @@
 // Prosty Menadżer subskrypcji — localStorage
-const STORAGE_KEY = 'subscriptions_v1'
 const CATEGORIES_KEY = 'subscription_categories_v1'
 const AUTH_KEY = 'subscription_auth_v1'
 const USERS_KEY = 'subscription_users_v1'
@@ -9,6 +8,7 @@ let subs = []
 let categories = []
 let isLoggedIn = false
 let isRegisterMode = false
+let currentUser = null
 
 // DOM
 const el = id => document.getElementById(id)
@@ -16,12 +16,24 @@ const tbody = document.querySelector('#subsTable tbody')
 const form = el('subForm')
 const totalEl = el('total')
 
+// Helper function to get storage key for user
+function getStorageKey(){
+  return currentUser ? `subscriptions_${currentUser}` : 'subscriptions_v1'
+}
+
 // Auth functions
 function initAuth(){
   const session = sessionStorage.getItem(AUTH_KEY)
   if(session){
-    isLoggedIn = true
-    showMainContent()
+    try{
+      const auth = JSON.parse(session)
+      currentUser = auth.username
+      isLoggedIn = true
+      showMainContent()
+    }catch(e){
+      isLoggedIn = false
+      showLoginForm()
+    }
   } else {
     isLoggedIn = false
     showLoginForm()
@@ -38,6 +50,10 @@ function showMainContent(){
   el('loginSection').classList.add('hidden')
   el('mainContent').classList.remove('hidden')
   el('logoutBtn').classList.remove('hidden')
+  // Load user's subscriptions
+  load()
+  populateCategoryOptions()
+  render()
 }
 
 function handleLogin(e){
@@ -47,6 +63,7 @@ function handleLogin(e){
   
   // Check demo credentials
   if(username === DEMO_CREDENTIALS.username && password === DEMO_CREDENTIALS.password){
+    currentUser = username
     sessionStorage.setItem(AUTH_KEY, JSON.stringify({username, timestamp: Date.now()}))
     isLoggedIn = true
     el('loginForm').reset()
@@ -59,6 +76,7 @@ function handleLogin(e){
   const user = users.find(u => u.username === username && u.password === password)
   
   if(user){
+    currentUser = username
     sessionStorage.setItem(AUTH_KEY, JSON.stringify({username, timestamp: Date.now()}))
     isLoggedIn = true
     el('loginForm').reset()
@@ -146,15 +164,18 @@ function handleRegister(e){
 }
 
 function handleLogout(){
+  save()  // Save user data before logout
   sessionStorage.removeItem(AUTH_KEY)
   isLoggedIn = false
+  currentUser = null
+  subs = []
   showLoginForm()
 }
 
 function load(){
-  try{subs = JSON.parse(localStorage.getItem(STORAGE_KEY))||[];}catch(e){subs=[]}
+  try{subs = JSON.parse(localStorage.getItem(getStorageKey()))||[];}catch(e){subs=[]}
 }
-function save(){localStorage.setItem(STORAGE_KEY, JSON.stringify(subs))}
+function save(){localStorage.setItem(getStorageKey(), JSON.stringify(subs))}
 function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,8)}
 
 function formatCurrency(n){return new Intl.NumberFormat('pl-PL',{style:'currency',currency:'PLN'}).format(n)}
@@ -352,4 +373,5 @@ el('toggleAuthBtn').addEventListener('click', toggleAuthMode)
 
 // init
 initAuth()
-load(); loadCategories(); populateCategoryOptions(); initDatepicker(); render();
+loadCategories()
+initDatepicker()
